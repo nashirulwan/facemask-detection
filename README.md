@@ -1,32 +1,102 @@
-# Facemask Project
+# Facemask Detection
 
-Kelompok project untuk reproduksi paper face mask detection, eksperimen lokal, dan deployment demo web.
+Face mask detection web app built from a CNN-based reproduction workflow and served as a full-stack demo with `SvelteKit`, `FastAPI`, `Docker`, `Tailscale`, and `Cloudflare Tunnel`.
 
-## Struktur
+Live demo: `https://mask.nashiru.me`
 
-- `frontend/`:
-  Frontend app. Rencana: SvelteKit.
-- `backend/`:
-  Backend inference. Rencana: FastAPI.
-- `deploy/`:
-  File deploy seperti `docker-compose.yml`, `Dockerfile`, dan config reverse proxy.
-- `reports/`:
-  Laporan tugas, ringkasan hasil, dan catatan eksperimen.
-- `sample_results/`:
-  Contoh output prediksi, grafik akurasi/loss, dan aset presentasi.
-- `assets/`:
-  Aset UI, gambar, ikon, dan branding kelompok.
-- `references/`:
-  Sitasi paper, kredit repo upstream, dan referensi teknis.
-- `dataset/`:
-  Placeholder untuk petunjuk dataset. Tidak untuk commit seluruh dataset mentah.
-- `notebooks/`:
-  Notebook analisis atau eksplorasi tambahan.
-- `docs/`:
-  Dokumentasi setup, arsitektur, dan panduan anggota tim.
+## Overview
 
-## Catatan
+This repository contains:
 
-- Repo ini dipisahkan dari repo upstream agar hasil kelompok lebih rapi.
-- Model training dan pipeline reproduksi awal saat ini masih ada di repo `../Facemask_Detection`.
-- Langkah berikutnya: scaffold `backend` dan `frontend`, lalu hubungkan ke model hasil training sendiri.
+- a `FastAPI` backend for face detection and mask classification
+- a `SvelteKit` frontend for image upload, webcam capture, and experiment visualization
+- Docker-based deployment files
+- trained model artifacts and experiment outputs
+
+The implementation is adapted from a paper reproduction workflow and an upstream open-source implementation documented in [references/UPSTREAM.md](references/UPSTREAM.md).
+
+## Stack
+
+- Frontend: `SvelteKit`
+- Backend: `FastAPI`
+- Model runtime: `TensorFlow` and `OpenCV`
+- Deployment: `Docker Compose`, `Nginx`
+- Networking: `Tailscale`, `Cloudflare Tunnel`
+
+## Project Structure
+
+- `frontend/` SvelteKit web application
+- `backend/` FastAPI inference service and model assets
+- `deploy/` Docker Compose and Nginx config
+- `assets/` demo images and UI assets
+- `references/` upstream attribution and paper references
+- `docs/` project notes and setup planning
+- `reports/` report drafts and experiment notes
+- `sample_results/` exported results for presentation or documentation
+- `dataset/` dataset placeholder only, not the full raw dataset
+- `notebooks/` optional notebook-based exploration
+
+## Run Locally
+
+### Docker
+
+```bash
+cd deploy
+docker compose up -d --build
+```
+
+Then open:
+
+- `http://localhost/`
+- `http://localhost/api/health`
+
+### Development Mode
+
+Backend:
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Then open:
+
+- frontend: `http://localhost:5173`
+- backend: `http://localhost:8000`
+
+## Features
+
+- image-based face mask detection
+- webcam capture and prediction
+- experiment results page with training metrics
+- Dockerized deployment for local or server hosting
+
+## Deployment Notes
+
+Production deployment currently uses:
+
+- app container in a Proxmox LXC
+- `Tailscale` for stable private routing
+- `cloudflared` on an infra node for public domain exposure
+
+Public endpoint:
+
+- `https://mask.nashiru.me`
+
+## Attribution
+
+- Paper reproduction target: `10.1007/s11042-022-12166-x`
+- Upstream repository: `techyhoney/Facemask_Detection`
+
+More detail is available in [references/UPSTREAM.md](references/UPSTREAM.md).
