@@ -1,0 +1,27 @@
+{
+  "with_mask": {
+    "precision": 0.9896373056994818,
+    "recall": 0.955,
+    "f1-score": 0.9720101781170484,
+    "support": 400.0
+  },
+  "without_mask": {
+    "precision": 0.9565217391304348,
+    "recall": 0.99,
+    "f1-score": 0.972972972972973,
+    "support": 400.0
+  },
+  "accuracy": 0.9725,
+  "macro avg": {
+    "precision": 0.9730795224149583,
+    "recall": 0.9724999999999999,
+    "f1-score": 0.9724915755450108,
+    "support": 800.0
+  },
+  "weighted avg": {
+    "precision": 0.9730795224149582,
+    "recall": 0.9725,
+    "f1-score": 0.9724915755450106,
+    "support": 800.0
+  }
+}

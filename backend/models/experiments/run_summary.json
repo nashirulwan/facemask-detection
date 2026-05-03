@@ -1,0 +1,13 @@
+{
+  "dataset_dir": "/home/nashiru/comvis/Facemask_Detection/dataset",
+  "num_images": 4000,
+  "train_samples": 3200,
+  "test_samples": 800,
+  "epochs": 100,
+  "batch_size": 32,
+  "learning_rate": 0.0005,
+  "seed": 10,
+  "final_train_accuracy": 0.989062488079071,
+  "final_val_accuracy": 0.9725000262260437,
+  "test_accuracy": 0.9725
+}
