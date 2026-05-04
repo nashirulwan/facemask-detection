@@ -194,6 +194,12 @@
 
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
+    .navbar,
+    .navbar.scrolled,
+    .nav-links {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
     .nav-container {
       padding: 0 1rem;
     }

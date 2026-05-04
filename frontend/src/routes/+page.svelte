@@ -298,6 +298,9 @@
       min-height: auto;
       padding: var(--space-2xl) 0;
     }
+    .hero-glow {
+      display: none;
+    }
     .hero-title {
       font-size: 2rem;
     }
