@@ -7,11 +7,11 @@
   let scrolled = $state(false);
 
   const navLinks = [
-    { href: '/', label: 'Home', icon: '🏠' },
-    { href: '/detect', label: 'Detect', icon: '🔍' },
-    { href: '/webcam', label: 'Webcam', icon: '📹' },
-    { href: '/experiments', label: 'Experiments', icon: '📊' },
-    { href: '/about', label: 'About', icon: '📄' },
+    { href: '/', label: 'Home' },
+    { href: '/detect', label: 'Detect' },
+    { href: '/webcam', label: 'Webcam' },
+    { href: '/experiments', label: 'Experiments' },
+    { href: '/about', label: 'About' },
   ];
 
   function toggleMenu() {
@@ -35,16 +35,12 @@
 <nav class="navbar" class:scrolled>
   <div class="nav-container">
     <a href="/" class="nav-brand">
-      <span class="brand-icon">🛡️</span>
       <span class="brand-text">Mask<span class="gradient-text">Detect</span></span>
     </a>
 
     <div class="nav-links" class:open={mobileMenuOpen}>
       {#each navLinks as link}
-        <a href={link.href} class="nav-link" onclick={() => mobileMenuOpen = false}>
-          <span class="nav-icon">{link.icon}</span>
-          {link.label}
-        </a>
+        <a href={link.href} class="nav-link" onclick={() => mobileMenuOpen = false}>{link.label}</a>
       {/each}
     </div>
 
@@ -61,17 +57,10 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-content">
-      <div class="footer-brand">
-        <span class="brand-icon">🛡️</span>
-        <span>Mask<span class="gradient-text">Detect</span></span>
-      </div>
-      <p class="footer-text">
-        Reproducing "A real time face mask detection system using CNN"
-      </p>
       <div class="footer-links">
-        <a href="https://doi.org/10.1007/s11042-022-12166-x" target="_blank" rel="noopener">Paper</a>
+        <a href="https://github.com/nashirulwan" target="_blank" rel="noopener">@nashirulwan</a>
         <span class="footer-sep">•</span>
-        <a href="https://github.com/techyhoney/Facemask_Detection" target="_blank" rel="noopener">Upstream</a>
+        <a href="https://github.com/nashirulwan/facemask-detection" target="_blank" rel="noopener">facemask-detection</a>
       </div>
     </div>
   </div>
@@ -119,9 +108,6 @@
     color: var(--text-primary);
     text-decoration: none;
   }
-  .brand-icon {
-    font-size: 1.5rem;
-  }
   .brand-text {
     letter-spacing: -0.02em;
   }
@@ -133,9 +119,6 @@
   }
 
   .nav-link {
-    display: flex;
-    align-items: center;
-    gap: 6px;
     padding: 0.5rem 0.9rem;
     border-radius: var(--radius-sm);
     font-size: 0.875rem;
@@ -148,10 +131,6 @@
     color: var(--text-primary);
     background: rgba(255, 255, 255, 0.05);
   }
-  .nav-icon {
-    font-size: 1rem;
-  }
-
   .menu-toggle {
     display: none;
     background: none;
@@ -200,26 +179,14 @@
   }
   .footer-content {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--space-sm);
+    justify-content: center;
     text-align: center;
-  }
-  .footer-brand {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    font-weight: 700;
-    font-size: 1.1rem;
-  }
-  .footer-text {
-    font-size: 0.85rem;
-    color: var(--text-muted);
   }
   .footer-links {
     display: flex;
     gap: var(--space-sm);
     font-size: 0.85rem;
+    align-items: center;
   }
   .footer-sep {
     color: var(--text-muted);
@@ -227,6 +194,12 @@
 
   /* ===== MOBILE ===== */
   @media (max-width: 768px) {
+    .nav-container {
+      padding: 0 1rem;
+    }
+    .nav-brand {
+      font-size: 1rem;
+    }
     .menu-toggle {
       display: block;
     }
@@ -251,6 +224,13 @@
       width: 100%;
       padding: 0.75rem 1rem;
       font-size: 1rem;
+    }
+    .footer-links {
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+    .footer-sep {
+      display: none;
     }
   }
 </style>

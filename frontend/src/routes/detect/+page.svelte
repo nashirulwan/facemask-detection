@@ -73,7 +73,7 @@
 <section class="section">
   <div class="container">
     <div class="page-header animate-in">
-      <h1>🔍 <span class="gradient-text">Image Detection</span></h1>
+      <h1><span class="gradient-text">Image Detection</span></h1>
       <p>Upload an image to detect face masks. The model will identify faces and classify each as "Mask" or "No Mask".</p>
     </div>
 
@@ -90,7 +90,6 @@
         onclick={openFilePicker}
         onkeydown={(e) => e.key === 'Enter' && openFilePicker()}
       >
-        <div class="drop-icon">📤</div>
         <h3>Drop image here or click to upload</h3>
         <p>Supports JPG, PNG, WebP</p>
       </div>
@@ -107,7 +106,7 @@
     <!-- Error -->
     {#if error}
       <div class="error-banner animate-in">
-        <span>⚠️ {error}</span>
+        <span>{error}</span>
         <button class="btn btn-ghost" onclick={reset}>Try Again</button>
       </div>
     {/if}
@@ -119,13 +118,13 @@
         <div class="results-header">
           <div class="results-meta">
             {#if result}
-              <span class="badge badge-green">✓ {result.faces_detected} face{result.faces_detected !== 1 ? 's' : ''} detected</span>
-              <span class="badge badge-blue">⏱ {result.processing_time_ms.toFixed(0)}ms</span>
+              <span class="badge badge-green">{result.faces_detected} face{result.faces_detected !== 1 ? 's' : ''} detected</span>
+              <span class="badge badge-blue">{result.processing_time_ms.toFixed(0)}ms</span>
             {:else if loading}
               <span class="badge badge-blue" style="animation: pulse 1.5s infinite">Processing...</span>
             {/if}
           </div>
-          <button class="btn btn-ghost" onclick={reset}>← New Image</button>
+          <button class="btn btn-ghost" onclick={reset}>New Image</button>
         </div>
 
         <!-- Side by side comparison -->
@@ -171,9 +170,7 @@
                   <tr>
                     <td>{i + 1}</td>
                     <td>
-                      <span class="badge" class:badge-green={det.label === 'Mask'} class:badge-red={det.label === 'No Mask'}>
-                        {det.label === 'Mask' ? '✓' : '✗'} {det.label}
-                      </span>
+                      <span class="badge" class:badge-green={det.label === 'Mask'} class:badge-red={det.label === 'No Mask'}>{det.label}</span>
                     </td>
                     <td>
                       <div class="confidence-bar">
@@ -210,10 +207,6 @@
   .drop-zone {
     max-width: 600px;
     margin: 0 auto;
-  }
-  .drop-icon {
-    font-size: 3rem;
-    margin-bottom: var(--space-md);
   }
   .drop-zone h3 {
     margin-bottom: var(--space-xs);
@@ -316,8 +309,32 @@
   }
 
   @media (max-width: 768px) {
+    .page-header p {
+      font-size: 0.95rem;
+    }
+    .drop-zone {
+      padding: 1.25rem;
+    }
+    .results-meta {
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .results-header {
+      align-items: stretch;
+    }
     .comparison-grid {
       grid-template-columns: 1fr;
+    }
+    .styled-table {
+      min-width: 560px;
+    }
+    .comparison-card h3,
+    .detections-table h3 {
+      font-size: 0.85rem;
+    }
+    .confidence-bar {
+      min-width: 140px;
     }
   }
 </style>

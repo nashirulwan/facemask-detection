@@ -41,12 +41,12 @@
   ];
 
   const techStack = [
-    { icon: '🐍', name: 'FastAPI', desc: 'Backend REST API & WebSocket' },
-    { icon: '🧡', name: 'SvelteKit', desc: 'Frontend web framework' },
-    { icon: '🧠', name: 'TensorFlow/Keras', desc: 'CNN model inference' },
-    { icon: '👁️', name: 'OpenCV', desc: 'Face detection (DNN SSD)' },
-    { icon: '🐳', name: 'Docker', desc: 'Containerized deployment' },
-    { icon: '📊', name: 'Chart.js', desc: 'Interactive training charts' },
+    { name: 'FastAPI', desc: 'Backend REST API & WebSocket' },
+    { name: 'SvelteKit', desc: 'Frontend web framework' },
+    { name: 'TensorFlow/Keras', desc: 'CNN model inference' },
+    { name: 'OpenCV', desc: 'Face detection (DNN SSD)' },
+    { name: 'Docker', desc: 'Containerized deployment' },
+    { name: 'Chart.js', desc: 'Interactive training charts' },
   ];
 </script>
 
@@ -58,14 +58,14 @@
 <section class="section">
   <div class="container">
     <div class="page-header animate-in">
-      <h1>📄 <span class="gradient-text">About This Project</span></h1>
+      <h1><span class="gradient-text">About This Project</span></h1>
       <p>Reproducing a research paper on real-time face mask detection using CNN.</p>
     </div>
 
     <!-- Paper info -->
     <div class="glass-card paper-card animate-in delay-1">
       <div class="paper-badge">
-        <span class="badge badge-blue">📝 Research Paper</span>
+        <span class="badge badge-blue">Research Paper</span>
       </div>
       <h2>{info?.paper_title || 'Loading...'}</h2>
       <div class="paper-meta">
@@ -108,7 +108,7 @@
 
     <!-- Model Architecture -->
     <div class="glass-card animate-in delay-2">
-      <h2>🧠 Model Architecture</h2>
+      <h2>Model Architecture</h2>
       <p class="arch-subtitle">Custom CNN with 5 convolutional blocks followed by dense classification layers.</p>
 
       <div class="arch-layers">
@@ -117,20 +117,16 @@
             <span class="layer-name">{layer.name}</span>
             <span class="layer-desc">{layer.desc}</span>
           </div>
-          {#if i < layers.length - 1}
-            <div class="layer-connector">↓</div>
-          {/if}
         {/each}
       </div>
     </div>
 
     <!-- Tech Stack -->
     <div class="glass-card animate-in delay-3">
-      <h2>🛠️ Tech Stack</h2>
+      <h2>Tech Stack</h2>
       <div class="tech-grid">
         {#each techStack as tech}
           <div class="tech-item">
-            <span class="tech-icon">{tech.icon}</span>
             <div>
               <strong>{tech.name}</strong>
               <p>{tech.desc}</p>
@@ -142,23 +138,19 @@
 
     <!-- References -->
     <div class="glass-card animate-in delay-3">
-      <h2>🔗 References</h2>
+      <h2>References</h2>
       <div class="references">
         <a href="https://doi.org/10.1007/s11042-022-12166-x" target="_blank" rel="noopener" class="ref-link">
-          <span class="ref-icon">📝</span>
           <div>
             <strong>Original Paper</strong>
             <p>DOI: 10.1007/s11042-022-12166-x</p>
           </div>
-          <span class="ref-arrow">↗</span>
         </a>
         <a href="https://github.com/techyhoney/Facemask_Detection" target="_blank" rel="noopener" class="ref-link">
-          <span class="ref-icon">💻</span>
           <div>
             <strong>Upstream Repository</strong>
             <p>github.com/techyhoney/Facemask_Detection (MIT License)</p>
           </div>
-          <span class="ref-arrow">↗</span>
         </a>
       </div>
     </div>
@@ -264,16 +256,13 @@
     font-weight: 600;
     font-family: 'Courier New', monospace;
     color: var(--text-primary);
+    overflow-wrap: anywhere;
   }
   .layer-desc {
     font-size: 0.75rem;
     color: var(--text-muted);
+    overflow-wrap: anywhere;
   }
-  .layer-connector {
-    color: var(--text-muted);
-    font-size: 0.8rem;
-  }
-
   /* Tech Stack */
   .tech-grid {
     display: grid;
@@ -281,16 +270,11 @@
     gap: var(--space-md);
   }
   .tech-item {
-    display: flex;
-    align-items: center;
-    gap: var(--space-md);
+    display: block;
     padding: var(--space-md);
     background: var(--bg-glass-light);
     border-radius: var(--radius-sm);
     border: 1px solid rgba(255, 255, 255, 0.04);
-  }
-  .tech-icon {
-    font-size: 1.5rem;
   }
   .tech-item strong {
     display: block;
@@ -312,7 +296,6 @@
   .ref-link {
     display: flex;
     align-items: center;
-    gap: var(--space-md);
     padding: var(--space-md) var(--space-lg);
     background: var(--bg-glass-light);
     border-radius: var(--radius-md);
@@ -324,9 +307,6 @@
     background: var(--bg-card-hover);
     border-color: rgba(255, 255, 255, 0.1);
   }
-  .ref-icon {
-    font-size: 1.5rem;
-  }
   .ref-link strong {
     display: block;
     color: var(--text-primary);
@@ -336,20 +316,18 @@
     font-size: 0.8rem;
     color: var(--text-muted);
     margin: 0;
+    overflow-wrap: anywhere;
   }
-  .ref-arrow {
-    margin-left: auto;
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    transition: transform var(--transition-fast);
-  }
-  .ref-link:hover .ref-arrow {
-    transform: translate(2px, -2px);
-    color: var(--accent-blue);
-  }
-
   @media (max-width: 768px) {
-    .paper-specs { grid-template-columns: 1fr 1fr; }
+    .paper-specs { grid-template-columns: 1fr; }
+    .layer-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+    }
     .tech-grid { grid-template-columns: 1fr; }
+    .ref-link {
+      padding: 0.9rem 1rem;
+    }
   }
 </style>

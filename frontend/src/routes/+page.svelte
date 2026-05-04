@@ -1,29 +1,25 @@
 <script>
   const features = [
     {
-      icon: '📤',
       title: 'Image Upload',
       desc: 'Upload any image and detect face masks instantly with bounding box annotations.',
       href: '/detect',
       color: 'green',
     },
     {
-      icon: '📹',
       title: 'Webcam Demo',
       desc: 'Real-time face mask detection using your webcam with live bounding boxes.',
       href: '/webcam',
       color: 'blue',
     },
     {
-      icon: '📊',
       title: 'Experiments',
       desc: 'Explore training metrics, accuracy curves, confusion matrix, and classification report.',
       href: '/experiments',
       color: 'purple',
     },
     {
-      icon: '📄',
-      title: 'About Paper',
+      title: 'About',
       desc: 'Learn about the reproduced research paper, model architecture, and methodology.',
       href: '/about',
       color: 'amber',
@@ -47,23 +43,16 @@
 <section class="hero">
   <div class="container">
     <div class="hero-content animate-in">
-      <div class="hero-badge">
-        <span class="badge badge-green">🔬 Paper Reproduction</span>
-      </div>
       <h1 class="hero-title">
         Real-time <span class="gradient-text">Face Mask</span> Detection
       </h1>
       <p class="hero-subtitle">
-        Powered by a custom CNN reproducing the research paper — detect face masks
-        in images and live video with high accuracy.
+        A simple web interface for running a CNN-based face mask detector on images
+        and webcam captures.
       </p>
       <div class="hero-actions">
-        <a href="/detect" class="btn btn-primary btn-lg">
-          🔍 Start Detecting
-        </a>
-        <a href="/about" class="btn btn-ghost btn-lg">
-          Learn More →
-        </a>
+        <a href="/detect" class="btn btn-primary btn-lg">Start Detecting</a>
+        <a href="/about" class="btn btn-ghost btn-lg">About</a>
       </div>
     </div>
 
@@ -94,10 +83,8 @@
     <div class="features-grid">
       {#each features as feature, i}
         <a href={feature.href} class="feature-card glass-card animate-in delay-{i + 1}" data-color={feature.color}>
-          <div class="feature-icon">{feature.icon}</div>
           <h3>{feature.title}</h3>
           <p>{feature.desc}</p>
-          <span class="feature-arrow">→</span>
         </a>
       {/each}
     </div>
@@ -118,19 +105,16 @@
         <h3>Input Image</h3>
         <p>Upload an image or capture from webcam</p>
       </div>
-      <div class="pipeline-arrow">→</div>
       <div class="pipeline-step">
         <div class="step-number">2</div>
         <h3>Face Detection</h3>
         <p>SSD network finds all faces (300×300 blob)</p>
       </div>
-      <div class="pipeline-arrow">→</div>
       <div class="pipeline-step">
         <div class="step-number">3</div>
         <h3>Mask Classification</h3>
         <p>Custom CNN classifies each face (96×96 crop)</p>
       </div>
-      <div class="pipeline-arrow">→</div>
       <div class="pipeline-step">
         <div class="step-number">4</div>
         <h3>Results</h3>
@@ -157,15 +141,10 @@
     margin: 0 auto;
   }
 
-  .hero-badge {
-    margin-bottom: var(--space-lg);
-  }
-
   .hero-title {
     font-size: clamp(2.5rem, 6vw, 4rem);
-    font-weight: 900;
+    font-weight: 700;
     line-height: 1.1;
-    letter-spacing: -0.03em;
     margin-bottom: var(--space-lg);
   }
 
@@ -261,11 +240,6 @@
     transform: scaleX(1);
   }
 
-  .feature-icon {
-    font-size: 2.5rem;
-    margin-bottom: var(--space-md);
-  }
-
   .feature-card h3 {
     font-size: 1.2rem;
     margin-bottom: var(--space-sm);
@@ -274,18 +248,6 @@
   .feature-card p {
     font-size: 0.9rem;
     flex: 1;
-  }
-
-  .feature-arrow {
-    display: inline-block;
-    margin-top: var(--space-md);
-    color: var(--text-muted);
-    font-size: 1.25rem;
-    transition: transform var(--transition-fast), color var(--transition-fast);
-  }
-  .feature-card:hover .feature-arrow {
-    transform: translateX(6px);
-    color: var(--accent-green);
   }
 
   /* ===== PIPELINE ===== */
@@ -330,28 +292,33 @@
     font-size: 0.8rem;
   }
 
-  .pipeline-arrow {
-    color: var(--text-muted);
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-
   /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
+    .hero {
+      min-height: auto;
+      padding: var(--space-2xl) 0;
+    }
+    .hero-title {
+      font-size: 2rem;
+    }
+    .hero-subtitle {
+      font-size: 1rem;
+    }
     .features-grid {
       grid-template-columns: 1fr;
     }
     .stats-bar {
       grid-template-columns: repeat(2, 1fr);
-    }
-    .pipeline-arrow {
-      display: none;
+      padding: 1rem;
+      gap: 0.75rem;
     }
     .pipeline {
       flex-direction: column;
     }
     .pipeline-step {
       width: 100%;
+      min-width: 0;
+      text-align: left;
     }
   }
 </style>

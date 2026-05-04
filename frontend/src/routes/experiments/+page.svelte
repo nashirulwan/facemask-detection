@@ -157,13 +157,13 @@
 <section class="section">
   <div class="container">
     <div class="page-header animate-in">
-      <h1>📊 <span class="gradient-text">Experiment Results</span></h1>
+      <h1><span class="gradient-text">Experiment Results</span></h1>
       <p>Training metrics and evaluation results from reproducing the paper.</p>
     </div>
 
     {#if error}
       <div class="error-banner animate-in">
-        <span>⚠️ {error}</span>
+        <span>{error}</span>
       </div>
     {/if}
 
@@ -429,6 +429,7 @@
   .config-item {
     display: flex;
     justify-content: space-between;
+    gap: var(--space-sm);
     padding: var(--space-sm) var(--space-md);
     background: var(--bg-glass-light);
     border-radius: var(--radius-sm);
@@ -443,6 +444,8 @@
     font-weight: 600;
     font-size: 0.85rem;
     font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+    text-align: right;
   }
 
   .glass-card {
@@ -454,8 +457,34 @@
   }
 
   @media (max-width: 768px) {
+    .chart-wrapper {
+      height: 240px;
+    }
+    .styled-table {
+      min-width: 560px;
+    }
+    .confusion-matrix {
+      max-width: 100%;
+      grid-template-columns: auto 1fr 1fr;
+    }
+    .cm-header,
+    .cm-label {
+      padding: 0.5rem;
+      font-size: 0.68rem;
+    }
+    .cm-cell {
+      padding: 0.85rem;
+      font-size: 1.1rem;
+    }
     .config-grid {
       grid-template-columns: 1fr;
+    }
+    .config-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .config-val {
+      text-align: left;
     }
   }
 </style>

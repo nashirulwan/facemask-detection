@@ -11,6 +11,7 @@
   let loading = $state(false);
   let error = $state(null);
   let capturedImageUrl = $state(null);
+  let frameOrientation = $state('landscape');
 
   async function startCamera() {
     error = null;
@@ -21,7 +22,11 @@
       });
       if (videoEl) {
         videoEl.srcObject = stream;
+        videoEl.onloadedmetadata = () => {
+          frameOrientation = videoEl.videoHeight > videoEl.videoWidth ? 'portrait' : 'landscape';
+        };
         await videoEl.play();
+        frameOrientation = videoEl.videoHeight > videoEl.videoWidth ? 'portrait' : 'landscape';
         cameraActive = true;
       }
     } catch (err) {
@@ -35,6 +40,7 @@
       stream = null;
     }
     cameraActive = false;
+    frameOrientation = 'landscape';
   }
 
   async function captureAndDetect() {
@@ -84,35 +90,27 @@
 <section class="section">
   <div class="container">
     <div class="page-header animate-in">
-      <h1>📹 <span class="gradient-text">Webcam Detection</span></h1>
+      <h1><span class="gradient-text">Webcam Detection</span></h1>
       <p>Use your webcam to capture a photo and detect face masks in real-time.</p>
     </div>
 
     <!-- Camera controls -->
     <div class="camera-controls animate-in delay-1">
       {#if !cameraActive}
-        <button class="btn btn-primary btn-lg" onclick={startCamera}>
-          📷 Start Camera
-        </button>
+        <button class="btn btn-primary btn-lg" onclick={startCamera}>Start Camera</button>
       {:else}
-        <button class="btn btn-secondary" onclick={stopCamera}>
-          ⏹ Stop Camera
-        </button>
+        <button class="btn btn-secondary" onclick={stopCamera}>Stop Camera</button>
         {#if !capturing}
-          <button class="btn btn-primary btn-lg" onclick={captureAndDetect}>
-            📸 Capture & Detect
-          </button>
+          <button class="btn btn-primary btn-lg" onclick={captureAndDetect}>Capture & Detect</button>
         {:else}
-          <button class="btn btn-ghost" onclick={resetCapture}>
-            🔄 New Capture
-          </button>
+          <button class="btn btn-ghost" onclick={resetCapture}>New Capture</button>
         {/if}
       {/if}
     </div>
 
     {#if error}
       <div class="error-banner animate-in">
-        <span>⚠️ {error}</span>
+        <span>{error}</span>
       </div>
     {/if}
 
@@ -120,10 +118,9 @@
       <!-- Video feed -->
       <div class="video-section glass-card">
         <h3>Camera Feed</h3>
-        <div class="video-wrapper" class:inactive={!cameraActive}>
+        <div class="video-wrapper" class:inactive={!cameraActive} class:portrait={frameOrientation === 'portrait'}>
           {#if !cameraActive}
             <div class="camera-placeholder">
-              <span class="placeholder-icon">📷</span>
               <p>Camera is off. Click "Start Camera" to begin.</p>
             </div>
           {/if}
@@ -135,20 +132,19 @@
       <!-- Result -->
       <div class="result-section glass-card">
         <h3>Detection Result</h3>
-        <div class="result-wrapper">
+        <div class="result-wrapper" class:portrait={frameOrientation === 'portrait'}>
           {#if loading}
             <div class="skeleton-img skeleton"></div>
           {:else if result}
             <img src="data:image/jpeg;base64,{result.annotated_image}" alt="Detection result" />
             <div class="result-badges">
-              <span class="badge badge-green">✓ {result.faces_detected} face{result.faces_detected !== 1 ? 's' : ''}</span>
-              <span class="badge badge-blue">⏱ {result.processing_time_ms.toFixed(0)}ms</span>
+              <span class="badge badge-green">{result.faces_detected} face{result.faces_detected !== 1 ? 's' : ''}</span>
+              <span class="badge badge-blue">{result.processing_time_ms.toFixed(0)}ms</span>
             </div>
           {:else if capturedImageUrl}
             <img src={capturedImageUrl} alt="Captured frame" />
           {:else}
             <div class="camera-placeholder">
-              <span class="placeholder-icon">🔍</span>
               <p>Capture a photo to see detection results.</p>
             </div>
           {/if}
@@ -226,7 +222,7 @@
 
   .video-wrapper,
   .result-wrapper {
-    aspect-ratio: 4/3;
+    aspect-ratio: 4 / 3;
     border-radius: var(--radius-md);
     overflow: hidden;
     background: var(--bg-secondary);
@@ -236,11 +232,17 @@
     position: relative;
   }
 
+  .video-wrapper.portrait,
+  .result-wrapper.portrait {
+    aspect-ratio: 3 / 4;
+  }
+
   video {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: var(--radius-md);
+    background: var(--bg-secondary);
   }
   video.hidden {
     display: none;
@@ -251,13 +253,6 @@
     color: var(--text-muted);
     padding: var(--space-xl);
   }
-  .placeholder-icon {
-    font-size: 3rem;
-    display: block;
-    margin-bottom: var(--space-md);
-    opacity: 0.5;
-  }
-
   .result-wrapper img {
     width: 100%;
     height: 100%;
@@ -311,8 +306,25 @@
   }
 
   @media (max-width: 768px) {
+    .camera-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
     .webcam-layout {
       grid-template-columns: 1fr;
+    }
+    .video-wrapper,
+    .result-wrapper,
+    .video-wrapper.portrait,
+    .result-wrapper.portrait {
+      aspect-ratio: auto;
+      min-height: 280px;
+    }
+    .result-badges {
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      flex-wrap: wrap;
     }
   }
 </style>
