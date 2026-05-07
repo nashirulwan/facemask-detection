@@ -34,10 +34,12 @@ async def predict_stream(websocket: WebSocket):
     try:
         while True:
             frame_bytes = await websocket.receive_bytes()
-            annotated_b64, detections = process_frame_bytes(frame_bytes)
+            result = process_frame_bytes(frame_bytes)
             await websocket.send_text(json.dumps({
-                "annotated_image": annotated_b64,
-                "detections": [d.model_dump() for d in detections],
+                "faces_detected": result.faces_detected,
+                "annotated_image": result.annotated_image,
+                "detections": [d.model_dump() for d in result.detections],
+                "processing_time_ms": result.processing_time_ms,
             }))
     except WebSocketDisconnect:
         pass

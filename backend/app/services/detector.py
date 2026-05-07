@@ -121,12 +121,11 @@ def process_image(pil_image: Image.Image) -> PredictionResponse:
     )
 
 
-def process_frame_bytes(frame_bytes: bytes) -> tuple[str, list[FaceDetection]]:
+def process_frame_bytes(frame_bytes: bytes) -> PredictionResponse:
     """Process raw JPEG/PNG bytes from a webcam frame.
 
-    Returns the annotated image as base64 and the list of detections.
-    Used by the WebSocket streaming endpoint.
+    Returns the same structured response as image upload inference so the
+    webcam client can reuse the same rendering path.
     """
     pil_image = Image.open(BytesIO(frame_bytes))
-    result = process_image(pil_image)
-    return result.annotated_image, result.detections
+    return process_image(pil_image)

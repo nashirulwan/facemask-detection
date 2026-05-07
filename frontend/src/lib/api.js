@@ -85,5 +85,11 @@ export function getCurveUrl(name) {
  * @returns {WebSocket}
  */
 export function createPredictionSocket() {
-  return new WebSocket(`${API_BASE.replace('http', 'ws')}/api/predict/stream`);
+  if (API_BASE) {
+    return new WebSocket(`${API_BASE.replace('http', 'ws')}/api/predict/stream`);
+  }
+
+  const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+  const url = `${protocol}//${window.location.host}/api/predict/stream`;
+  return new WebSocket(url);
 }
