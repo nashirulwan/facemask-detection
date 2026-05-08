@@ -9,7 +9,7 @@ Live demo: `https://mask.nashiru.me`
 This repository contains:
 
 - a `FastAPI` backend for face detection and mask classification
-- a `SvelteKit` frontend for image upload, webcam capture, and experiment visualization
+- a `SvelteKit` frontend for image upload, webcam snapshot, realtime webcam, and experiment visualization
 - Docker-based deployment files
 - trained model artifacts and experiment outputs
 
@@ -30,11 +30,7 @@ The implementation is adapted from a paper reproduction workflow and an upstream
 - `deploy/` Docker Compose and Nginx config
 - `assets/` demo images and UI assets
 - `references/` upstream attribution and paper references
-- `docs/` project notes and setup planning
-- `reports/` report drafts and experiment notes
-- `sample_results/` exported results for presentation or documentation
 - `dataset/` dataset placeholder only, not the full raw dataset
-- `notebooks/` optional notebook-based exploration
 
 ## Run Locally
 
@@ -78,7 +74,9 @@ Then open:
 ## Features
 
 - image-based face mask detection
-- webcam capture and prediction
+- webcam snapshot detection
+- realtime webcam detection via WebSocket
+- separate detection tuning for `image` and `webcam` use cases
 - experiment results page with training metrics
 - Dockerized deployment for local or server hosting
 
