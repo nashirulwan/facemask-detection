@@ -1,42 +1,48 @@
-# sv
+# Frontend
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Folder ini berisi web app `SvelteKit` untuk antarmuka face mask detection.
 
-## Creating a project
+## Halaman Utama
 
-If you're seeing this, you've probably already done this step. Congrats!
+- `/`
+  landing page
+- `/detect`
+  upload gambar dan lihat hasil anotasi
+- `/webcam`
+  webcam snapshot dan realtime webcam
+- `/experiments`
+  ringkasan hasil training dan evaluasi
+- `/about`
+  informasi model, paper, dan referensi
 
-```sh
-# create a new project
-npx sv create my-app
-```
+## File Penting
 
-To recreate this project with the same configuration:
+- `src/routes/`
+  page utama aplikasi
+- `src/lib/api.js`
+  client request ke backend HTTP dan WebSocket
+- `src/app.css`
+  styling global
+- `Dockerfile`
+  build image frontend
 
-```sh
-# recreate this project
-npx sv@0.15.2 create --template minimal --no-types --install npm frontend/
-```
+## Development
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
+```bash
+npm install
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+Frontend dev default:
 
-To create a production version of your app:
+- `http://localhost:5173`
 
-```sh
-npm run build
-```
+Backend API default:
 
-You can preview the production build with `npm run preview`.
+- `http://localhost:8000`
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## Catatan
+
+- Halaman `detect` memakai profil backend `image`
+- Halaman `webcam` memakai profil backend `webcam`
+- Realtime webcam menggunakan WebSocket
