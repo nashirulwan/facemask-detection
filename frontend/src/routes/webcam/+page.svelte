@@ -151,7 +151,7 @@
     if (!cameraActive || liveMode) return;
 
     connectionStatus = 'connecting';
-    socket = createPredictionSocket();
+    socket = createPredictionSocket('webcam');
 
     socket.onopen = () => {
       liveMode = true;
@@ -207,7 +207,7 @@
 
       const file = new File([blob], 'webcam_capture.jpg', { type: 'image/jpeg' });
       try {
-        result = await predictImage(file);
+        result = await predictImage(file, 'webcam');
       } catch (err) {
         error = err.message || 'Prediction failed. Is the backend running?';
       } finally {

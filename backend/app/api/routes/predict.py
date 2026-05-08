@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from fastapi import APIRouter, File, UploadFile, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, File, Form, UploadFile, WebSocket, WebSocketDisconnect
 from PIL import Image
 
 from app.services.detector import process_frame_bytes, process_image
@@ -13,13 +13,16 @@ router = APIRouter(prefix="/api/predict", tags=["predict"])
 
 
 @router.post("/image")
-async def predict_image(file: UploadFile = File(...)):
+async def predict_image(
+    file: UploadFile = File(...),
+    profile: str = Form("image"),
+):
     """Accept an uploaded image and return mask detection results.
 
     Returns JSON with per-face detections and the annotated image as base64.
     """
     pil_image = Image.open(file.file)
-    result = process_image(pil_image)
+    result = process_image(pil_image, profile=profile)
     return result
 
 
@@ -32,9 +35,10 @@ async def predict_stream(websocket: WebSocket):
     """
     await websocket.accept()
     try:
+        profile = websocket.query_params.get("profile", "webcam")
         while True:
             frame_bytes = await websocket.receive_bytes()
-            result = process_frame_bytes(frame_bytes)
+            result = process_frame_bytes(frame_bytes, profile=profile)
             await websocket.send_text(json.dumps({
                 "faces_detected": result.faces_detected,
                 "annotated_image": result.annotated_image,

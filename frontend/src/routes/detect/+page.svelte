@@ -1,4 +1,5 @@
 <script>
+  import { tick } from 'svelte';
   import { predictImage } from '$lib/api.js';
 
   let fileInput = $state(null);
@@ -7,6 +8,7 @@
   let loading = $state(false);
   let error = $state(null);
   let dragover = $state(false);
+  let resultCard = $state(null);
 
   function handleFiles(files) {
     if (!files || files.length === 0) return;
@@ -25,7 +27,11 @@
     loading = true;
     error = null;
     try {
-      result = await predictImage(file);
+      result = await predictImage(file, 'image');
+      if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+        await tick();
+        resultCard?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     } catch (err) {
       error = err.message || 'Prediction failed. Is the backend running?';
     } finally {
@@ -129,14 +135,14 @@
 
         <!-- Side by side comparison -->
         <div class="comparison-grid">
-          <div class="comparison-card glass-card">
+          <div class="comparison-card glass-card original-card">
             <h3>Original</h3>
             <div class="image-wrapper">
               <img src={previewUrl} alt="Original uploaded image" />
             </div>
           </div>
 
-          <div class="comparison-card glass-card">
+          <div bind:this={resultCard} class="comparison-card glass-card result-card">
             <h3>Detection Result</h3>
             <div class="image-wrapper">
               {#if loading}
@@ -325,6 +331,9 @@
     }
     .comparison-grid {
       grid-template-columns: 1fr;
+    }
+    .result-card {
+      order: -1;
     }
     .styled-table {
       min-width: 560px;

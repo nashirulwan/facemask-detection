@@ -9,11 +9,13 @@ const API_BASE = import.meta.env.VITE_API_BASE || '';
 /**
  * Upload an image for mask detection.
  * @param {File} file - Image file to analyze
+ * @param {'image' | 'webcam'} profile - Detection tuning profile
  * @returns {Promise<object>} Prediction response with detections and annotated image
  */
-export async function predictImage(file) {
+export async function predictImage(file, profile = 'image') {
   const form = new FormData();
   form.append('file', file);
+  form.append('profile', profile);
 
   const res = await fetch(`${API_BASE}/api/predict/image`, {
     method: 'POST',
@@ -82,14 +84,15 @@ export function getCurveUrl(name) {
 
 /**
  * Create a WebSocket connection for real-time webcam streaming.
+ * @param {'image' | 'webcam'} profile
  * @returns {WebSocket}
  */
-export function createPredictionSocket() {
+export function createPredictionSocket(profile = 'webcam') {
   if (API_BASE) {
-    return new WebSocket(`${API_BASE.replace('http', 'ws')}/api/predict/stream`);
+    return new WebSocket(`${API_BASE.replace('http', 'ws')}/api/predict/stream?profile=${encodeURIComponent(profile)}`);
   }
 
   const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-  const url = `${protocol}//${window.location.host}/api/predict/stream`;
+  const url = `${protocol}//${window.location.host}/api/predict/stream?profile=${encodeURIComponent(profile)}`;
   return new WebSocket(url);
 }
