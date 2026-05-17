@@ -88,6 +88,50 @@ def _should_keep_webcam_candidate(
     return True
 
 
+def _select_webcam_candidates(
+    *,
+    boxes: list[list[int]],
+    confidences: list[float],
+    image_width: int,
+    image_height: int,
+) -> list[int]:
+    """Keep webcam behavior close to the original repo and suppress edge false positives."""
+    if not boxes:
+        return []
+
+    best_idx = max(range(len(boxes)), key=lambda idx: confidences[idx])
+    best_confidence = confidences[best_idx]
+    kept: list[int] = []
+
+    for idx, box in enumerate(boxes):
+        if not _should_keep_webcam_candidate(
+            box=box,
+            confidence=confidences[idx],
+            best_confidence=best_confidence,
+            image_width=image_width,
+            image_height=image_height,
+        ):
+            continue
+
+        start_x, start_y, box_width, box_height = box
+        end_x = start_x + box_width
+        end_y = start_y + box_height
+        center_y = start_y + (box_height / 2)
+        touches_bottom = end_y >= image_height - 4
+        very_low_candidate = center_y > image_height * 0.58
+        substantially_weaker = confidences[idx] < best_confidence * 0.92
+
+        # Selfie webcam frames commonly produce a false second face on the lower
+        # right cheek/neck area. The original repo uses the raw SSD detections;
+        # this small filter keeps that behavior while dropping that recurring case.
+        if idx != best_idx and touches_bottom and very_low_candidate and substantially_weaker:
+            continue
+
+        kept.append(idx)
+
+    return kept
+
+
 def _pil_to_cv2(pil_image: Image.Image) -> np.ndarray:
     """Convert a PIL Image to a BGR OpenCV array."""
     rgb = np.array(pil_image.convert("RGB"))
@@ -161,14 +205,23 @@ def process_image(pil_image: Image.Image, profile: str = "default") -> Predictio
             processing_time_ms=round(elapsed_ms, 1),
         )
 
-    picked_indices = cv2.dnn.NMSBoxes(
-        candidate_boxes,
-        candidate_confidences,
-        confidence_threshold,
-        nms_threshold,
-    )
+    if profile == "webcam":
+        picked_flat = _select_webcam_candidates(
+            boxes=candidate_boxes,
+            confidences=candidate_confidences,
+            image_width=w,
+            image_height=h,
+        )
+    else:
+        picked_indices = cv2.dnn.NMSBoxes(
+            candidate_boxes,
+            candidate_confidences,
+            confidence_threshold,
+            nms_threshold,
+        )
+        picked_flat = [int(idx) for idx in np.array(picked_indices).flatten()]
 
-    if len(picked_indices) == 0:
+    if len(picked_flat) == 0:
         elapsed_ms = (time.perf_counter() - start) * 1000
         return PredictionResponse(
             faces_detected=0,
@@ -178,19 +231,9 @@ def process_image(pil_image: Image.Image, profile: str = "default") -> Predictio
         )
 
     results: list[FaceDetection] = []
-    picked_flat = [int(idx) for idx in np.array(picked_indices).flatten()]
     best_confidence = max(candidate_confidences[int(idx)] for idx in picked_flat)
 
     for idx in picked_flat:
-        if profile == "webcam" and not _should_keep_webcam_candidate(
-            box=candidate_boxes[idx],
-            confidence=candidate_confidences[idx],
-            best_confidence=best_confidence,
-            image_width=w,
-            image_height=h,
-        ):
-            continue
-
         start_x, start_y, box_width, box_height = candidate_boxes[int(idx)]
         end_x = start_x + box_width
         end_y = start_y + box_height
