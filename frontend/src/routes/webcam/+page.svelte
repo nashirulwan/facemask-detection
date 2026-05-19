@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { createPredictionSocket, predictImage } from '$lib/api.js';
 
-  const LIVE_FPS = 3;
+  const LIVE_FPS = 5;
   const JPEG_QUALITY = 0.72;
   const MAX_FRAME_WIDTH = 640;
 
