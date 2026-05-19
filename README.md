@@ -1,100 +1,62 @@
 # Facemask Detection
 
-Face mask detection web app built from a CNN-based reproduction workflow and served as a full-stack demo with `SvelteKit`, `FastAPI`, `Docker`, `Tailscale`, and `Cloudflare Tunnel`.
+Aplikasi web deteksi masker wajah berbasis CNN yang dibangun sebagai implementasi dan reproduksi paper:
 
-Live demo: `https://mask.nashiru.me`
+> **"A real time face mask detection system using convolutional neural network"**
+> Goyal et al., 2022 — DOI: `10.1007/s11042-022-12166-x`
 
-## Overview
+**Live demo:** [https://mask.nashiru.me](https://mask.nashiru.me)
 
-This repository contains:
+## Deskripsi
 
-- a `FastAPI` backend for face detection and mask classification
-- a `SvelteKit` frontend for image upload, webcam snapshot, realtime webcam, and experiment visualization
-- Docker-based deployment files
-- trained model artifacts and experiment outputs
+Sistem ini mendeteksi masker wajah pada gambar statis maupun video real-time menggunakan dua tahap:
 
-The implementation is adapted from a paper reproduction workflow and an upstream open-source implementation documented in [references/UPSTREAM.md](references/UPSTREAM.md).
+1. **Face detection** — OpenCV DNN dengan model SSD ResNet-10 untuk mendeteksi lokasi wajah
+2. **Mask classification** — CNN kustom 5 layer yang dilatih dari dataset 4000 gambar (2000 `with_mask`, 2000 `without_mask`)
 
-## Stack
+Model CNN mencapai **98.50% test accuracy** dengan precision dan recall 0.98 pada kedua kelas, mendekati hasil paper (~98%).
 
-- Frontend: `SvelteKit`
-- Backend: `FastAPI`
-- Model runtime: `TensorFlow` and `OpenCV`
-- Deployment: `Docker Compose`, `Nginx`
-- Networking: `Tailscale`, `Cloudflare Tunnel`
+## Fitur
 
-## Project Structure
+- Upload gambar dan deteksi masker secara langsung
+- Webcam real-time via WebSocket
+- Halaman eksperimen: kurva akurasi/loss, classification report, confusion matrix
+- Halaman tentang paper dan arsitektur model
 
-- `frontend/` SvelteKit web application
-- `backend/` FastAPI inference service and model assets
-- `deploy/` Docker Compose and Nginx config
-- `assets/` demo images and UI assets
-- `references/` upstream attribution and paper references
-- `dataset/` dataset placeholder only, not the full raw dataset
+## Teknologi
 
-## Run Locally
+| Komponen | Teknologi |
+|---|---|
+| Frontend | SvelteKit |
+| Backend | FastAPI + TensorFlow + OpenCV |
+| Deployment | Docker Compose + Nginx |
+| Model | CNN kustom (5× Conv2D + MaxPool + Dense) |
+| Face Detector | OpenCV DNN SSD (res10_300x300) |
 
-### Docker
+## Struktur Project
 
-```bash
-cd deploy
-docker compose up -d --build
+```
+facemask-project/
+├── frontend/       SvelteKit web app
+├── backend/        FastAPI inference service + model
+├── deploy/         Docker Compose dan Nginx config
+└── assets/         Demo images
 ```
 
-Then open:
+## Hasil Eksperimen
 
-- `http://localhost/`
-- `http://localhost/api/health`
+| Metrik | Nilai |
+|---|---|
+| Test Accuracy | 98.50% |
+| Precision (with_mask) | 0.98 |
+| Recall (with_mask) | 0.98 |
+| Precision (without_mask) | 0.98 |
+| Recall (without_mask) | 0.98 |
+| Dataset | 4000 gambar (80/20 split) |
+| Epochs | 100 |
+| Optimizer | Adam (lr=0.0005) |
 
-### Development Mode
+## Referensi
 
-Backend:
-
-```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-Frontend:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Then open:
-
-- frontend: `http://localhost:5173`
-- backend: `http://localhost:8000`
-
-## Features
-
-- image-based face mask detection
-- webcam snapshot detection
-- realtime webcam detection via WebSocket
-- separate detection tuning for `image` and `webcam` use cases
-- experiment results page with training metrics
-- Dockerized deployment for local or server hosting
-
-## Deployment Notes
-
-Production deployment currently uses:
-
-- app container in a Proxmox LXC
-- `Tailscale` for stable private routing
-- `cloudflared` on an infra node for public domain exposure
-
-Public endpoint:
-
-- `https://mask.nashiru.me`
-
-## Attribution
-
-- Paper reproduction target: `10.1007/s11042-022-12166-x`
-- Upstream repository: `techyhoney/Facemask_Detection`
-
-More detail is available in [references/UPSTREAM.md](references/UPSTREAM.md).
+- Paper: Goyal et al. (2022), DOI `10.1007/s11042-022-12166-x`
+- Upstream repo: [techyhoney/Facemask_Detection](https://github.com/techyhoney/Facemask_Detection)
