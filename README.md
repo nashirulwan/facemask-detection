@@ -8,7 +8,7 @@ Was live at `mask.nashiru.me` during the semester.
 
 #### What's here
 
-- `web/`: Svelte frontend plus a Flask backend that serves the inference API, with a Docker setup for deploy. The trained model is bundled so it works out of the box.
+- `web/`: Svelte frontend plus a FastAPI backend that serves the inference API, with a Docker setup for deploy. The trained model is bundled so it works out of the box.
 - `training/`: the model side. Notebooks and scripts to train and evaluate a custom CNN and a MobileNetV2 version, plus the experiment writeups.
 
 #### How it works
@@ -41,4 +41,4 @@ Training code is adapted from [techyhoney/Facemask_Detection](https://github.com
 
 #### License
 
-MIT, see LICENSE. The adapted training code keeps the original repo's MIT license too (`training/LICENSE`).
+[MIT](LICENSE). The adapted training code keeps the original repo's MIT license too (`training/LICENSE`).
