@@ -1,0 +1,18 @@
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+.next/
+.DS_Store
+.ipynb_checkpoints/
+.mpl-cache/
+.streamlit/
+
+# full dataset, use dataset_sample/ instead (full set is in the original repo, see README)
+training/dataset/
+
+# training run outputs and extra model checkpoints
+training/runs/
+training/output/
+training/model/
