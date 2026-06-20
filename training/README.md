@@ -22,6 +22,16 @@ Same dataset, split, input size (96x96), preprocessing and augmentation for both
 
 Both land around 0.98 precision and recall on both classes, close to the paper's ~98%. Full breakdown is in `COMPARISON_REPORT.md`.
 
+Training curves (custom CNN):
+
+![accuracy](results/cnn_accuracy.png)
+![loss](results/cnn_loss.png)
+
+Sample predictions:
+
+![mask](results/pred_mask_1.jpg)
+![no mask](results/pred_nomask_1.jpg)
+
 #### Run
 
 ```bash
@@ -39,6 +49,7 @@ python train_eval_mobilenetv2.py     # MobileNetV2
 - `Model_Training.ipynb`, `Model_Image_Testing.ipynb`, `Model_Video_Testing.ipynb`: the notebooks
 - `train_eval.py`, `train_eval_mobilenetv2.py`, `predict_image.py`: script versions
 - `COMPARISON_REPORT.md`, `LAPORAN_LENGKAP.md`, `REPRO_NOTES.md`: the writeups and reproduction notes
+- `results/`: training curves and sample predictions
 - `dataset_sample/`: a few sample images
 
 #### Credits

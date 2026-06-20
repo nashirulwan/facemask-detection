@@ -4,7 +4,7 @@ Real time face mask detection with a CNN. It's a reproduction of Goyal et al. (2
 
 Was live at `mask.nashiru.me` during the semester.
 
-![demo](demo.gif)
+![mask detection results](demo.png)
 
 #### What's here
 
