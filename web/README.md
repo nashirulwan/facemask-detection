@@ -2,6 +2,9 @@
 
 The SvelteKit frontend and the FastAPI backend that runs the mask detection model. You upload an image or turn on your webcam, and it draws boxes on each face with mask or no mask.
 
+![home](screenshot-home.png)
+![about page](screenshot-about.png)
+
 #### Features
 
 - Upload an image and get the detection right away
