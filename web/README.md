@@ -34,7 +34,6 @@ The backend serves the inference API, the frontend talks to it. Compose file and
 frontend/   SvelteKit app
 backend/    FastAPI inference service + the bundled model
 deploy/     Docker Compose and nginx config
-assets/     demo images
 ```
 
 The model and how it was trained live in `../training`.
