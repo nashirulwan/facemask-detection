@@ -2,10 +2,6 @@
 
 Real time face mask detection with a CNN. It's a reproduction of Goyal et al. (2022), with both the web app and the training code in one place. Built for a computer vision course.
 
-Was live at `mask.nashiru.me` during the semester.
-
-![mask detection results](demo.png)
-
 #### What's here
 
 - `web/`: SvelteKit frontend plus a FastAPI backend that serves the inference API, with a Docker setup for deploy. The trained model is bundled so it works out of the box.

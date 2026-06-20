@@ -27,11 +27,6 @@ Training curves (custom CNN):
 ![accuracy](results/cnn_accuracy.png)
 ![loss](results/cnn_loss.png)
 
-Sample predictions:
-
-![mask](results/pred_mask_1.jpg)
-![no mask](results/pred_nomask_1.jpg)
-
 #### Run
 
 ```bash
