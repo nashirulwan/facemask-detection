@@ -1,62 +1,40 @@
-# Facemask Detection
+### Web app
 
-Aplikasi web deteksi masker wajah berbasis CNN yang dibangun sebagai implementasi dan reproduksi paper:
+The SvelteKit frontend and the FastAPI backend that runs the mask detection model. You upload an image or turn on your webcam, and it draws boxes on each face with mask or no mask.
 
-> **"A real time face mask detection system using convolutional neural network"**
-> Goyal et al., 2022 — DOI: `10.1007/s11042-022-12166-x`
+#### Features
 
-**Live demo:** [https://mask.nashiru.me](https://mask.nashiru.me)
+- Upload an image and get the detection right away
+- Real time webcam detection over a WebSocket
+- Experiment pages: accuracy/loss curves, classification report, confusion matrix
+- An about page covering the paper and the model
 
-## Deskripsi
+#### Stack
 
-Sistem ini mendeteksi masker wajah pada gambar statis maupun video real-time menggunakan dua tahap:
-
-1. **Face detection** — OpenCV DNN dengan model SSD ResNet-10 untuk mendeteksi lokasi wajah
-2. **Mask classification** — CNN kustom 5 layer yang dilatih dari dataset 4000 gambar (2000 `with_mask`, 2000 `without_mask`)
-
-Model CNN mencapai **98.50% test accuracy** dengan precision dan recall 0.98 pada kedua kelas, mendekati hasil paper (~98%).
-
-## Fitur
-
-- Upload gambar dan deteksi masker secara langsung
-- Webcam real-time via WebSocket
-- Halaman eksperimen: kurva akurasi/loss, classification report, confusion matrix
-- Halaman tentang paper dan arsitektur model
-
-## Teknologi
-
-| Komponen | Teknologi |
-|---|---|
+| Part | Tech |
+|------|------|
 | Frontend | SvelteKit |
 | Backend | FastAPI + TensorFlow + OpenCV |
-| Deployment | Docker Compose + Nginx |
-| Model | CNN kustom (5× Conv2D + MaxPool + Dense) |
-| Face Detector | OpenCV DNN SSD (res10_300x300) |
+| Deploy | Docker Compose + Nginx |
+| Face detector | OpenCV DNN SSD (res10_300x300) |
+| Classifier | custom CNN, bundled in `backend/models` |
 
-## Struktur Project
+#### Run
 
-```
-facemask-project/
-├── frontend/       SvelteKit web app
-├── backend/        FastAPI inference service + model
-├── deploy/         Docker Compose dan Nginx config
-└── assets/         Demo images
+```bash
+cd deploy
+docker compose up --build
 ```
 
-## Hasil Eksperimen
+The backend serves the inference API, the frontend talks to it. Compose file and nginx config are in `deploy/`.
 
-| Metrik | Nilai |
-|---|---|
-| Test Accuracy | 98.50% |
-| Precision (with_mask) | 0.98 |
-| Recall (with_mask) | 0.98 |
-| Precision (without_mask) | 0.98 |
-| Recall (without_mask) | 0.98 |
-| Dataset | 4000 gambar (80/20 split) |
-| Epochs | 100 |
-| Optimizer | Adam (lr=0.0005) |
+#### Structure
 
-## Referensi
+```
+frontend/   SvelteKit app
+backend/    FastAPI inference service + the bundled model
+deploy/     Docker Compose and nginx config
+assets/     demo images
+```
 
-- Paper: Goyal et al. (2022), DOI `10.1007/s11042-022-12166-x`
-- Upstream repo: [techyhoney/Facemask_Detection](https://github.com/techyhoney/Facemask_Detection)
+The model and how it was trained live in `../training`.
