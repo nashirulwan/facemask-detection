@@ -41,4 +41,4 @@ Training code is adapted from [techyhoney/Facemask_Detection](https://github.com
 
 #### License
 
-Code from the original repo keeps its MIT license (`training/LICENSE`).
+MIT, see LICENSE. The adapted training code keeps the original repo's MIT license too (`training/LICENSE`).
